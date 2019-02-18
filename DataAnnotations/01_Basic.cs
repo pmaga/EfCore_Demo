@@ -1,30 +1,45 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
 using EfCore_Demo.Setup;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace EfCore_Demo.Conventions.PK_FK
+namespace EfCore_Demo.DataAnnotations.Basic
 {
     /*
         -----------------------
             CONFIGURATION
         -----------------------
     */
-
-    public class ConventionsContext : DbContext
+    
+    public class DataAnnotationsContext : DbContext
     {
         public DbSet<Team> Teams { get; set; }
         public DbSet<Member> Members { get; set; }
 
-        public ConventionsContext(DbContextOptions<ConventionsContext> options) : base(options) {}
-    }
+        public DataAnnotationsContext(DbContextOptions<DataAnnotationsContext> options) : base(options) {}
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Team>()
+                .Property(b => b.Created)
+                .HasDefaultValueSql("getdate()");
+        }
+    }
+    
+    [Table("Teams")]
     public class Team
     {
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime Created { get; set; } 
 
         public ICollection<Member> Members { get; set; }
     }
@@ -32,8 +47,11 @@ namespace EfCore_Demo.Conventions.PK_FK
     public class Member
     {
         public int Id { get; set; }
+        [Column("First_Name", Order = 1, TypeName="varchar(20)")]
         public string FirstName { get; set; }
+        [Column("Last_Name", Order = 2), StringLength(200, MinimumLength = 5)]
         public string LastName { get; set; }
+        [Required]
         public Team Team { get; set; }
     }
 
@@ -45,10 +63,12 @@ namespace EfCore_Demo.Conventions.PK_FK
     */
 
 
-    public class Tests : EfTest<ConventionsContext>
+    public class Tests : EfTest<DataAnnotationsContext>
     {
+        static bool UseSqlServer = true;
+
         public Tests(ITestOutputHelper output) 
-            : base(output, opt => new ConventionsContext(opt), useSqlServer: false)
+            : base(output, opt => new DataAnnotationsContext(opt), useSqlServer: UseSqlServer)
         {
         }
 
@@ -59,20 +79,7 @@ namespace EfCore_Demo.Conventions.PK_FK
         }
 
         [Fact]
-        public async Task Result_Async()
-        {
-            Seed();
-
-            var me = await DbContext.Members.FirstAsync();
-            DumpObject(me);
-
-            Separator();
-
-            var myTeam = await DbContext.Teams.FirstAsync();
-            DumpObject(myTeam);
-        }
-
-        private void Seed()
+        public async Task DateTime_Identity()
         {
             DbContext.Teams.Add(new Team 
             { 
@@ -81,7 +88,10 @@ namespace EfCore_Demo.Conventions.PK_FK
                     new Member { FirstName = "Pawel", LastName = "Maga" }
             }});
             DbContext.SaveChanges();
+
+            var myTeam = await DbContext.Teams.FirstAsync();
+            DumpObject(myTeam);
         }
+
     }
 }
-

@@ -18,5 +18,145 @@
 				"label": ""
 			}
 		]
+	},
+	{
+		"path": "$ROOTPATH$/DataAnnotations/01_Basic.cs",
+		"bookmarks": [
+			{
+				"line": 25,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 37,
+				"column": 18,
+				"label": ""
+			},
+			{
+				"line": 49,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 51,
+				"column": 7,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/Conventions/03_Extend.cs",
+		"bookmarks": [
+			{
+				"line": 24,
+				"column": 8,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/DataAnnotations/02_PK_FK.cs",
+		"bookmarks": [
+			{
+				"line": 27,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 29,
+				"column": 8,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/DataAnnotations/03_Concurrency.cs",
+		"bookmarks": [
+			{
+				"line": 30,
+				"column": 15,
+				"label": ""
+			},
+			{
+				"line": 48,
+				"column": 31,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/DataAnnotations/03_Concurrency_Timestamp.cs",
+		"bookmarks": [
+			{
+				"line": 30,
+				"column": 19,
+				"label": ""
+			},
+			{
+				"line": 45,
+				"column": 26,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/DataAnnotations/04_Concurrency_ConcurrencyCheck.cs",
+		"bookmarks": [
+			{
+				"line": 25,
+				"column": 21,
+				"label": ""
+			},
+			{
+				"line": 28,
+				"column": 22,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/DataAnnotations/05_OwnedTypes.cs",
+		"bookmarks": [
+			{
+				"line": 20,
+				"column": 32,
+				"label": ""
+			},
+			{
+				"line": 28,
+				"column": 39,
+				"label": ""
+			},
+			{
+				"line": 48,
+				"column": 29,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/DataAnnotations/06_InverseProperty.cs",
+		"bookmarks": [
+			{
+				"line": 21,
+				"column": 0,
+				"label": ""
+			},
+			{
+				"line": 40,
+				"column": 10,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/FluentApi/01_Basic.cs",
+		"bookmarks": [
+			{
+				"line": 26,
+				"column": 0,
+				"label": ""
+			}
+		]
 	}
 ]

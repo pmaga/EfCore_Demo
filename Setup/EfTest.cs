@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit.Abstractions;
@@ -17,8 +18,10 @@ namespace EfCore_Demo.Setup
 
         protected readonly ITestOutputHelper Output;
         protected readonly T DbContext;
+        protected readonly T SecondDbContext;
 
-        public EfTest(ITestOutputHelper output, Func<DbContextOptions<T>, T> ctxCreate, bool useSqlServer = false)
+        public EfTest(ITestOutputHelper output, Func<DbContextOptions<T>, T> ctxCreate, bool useSqlServer = false,
+            bool logToOutput = false)
         {
             Output = output;
 
@@ -36,9 +39,16 @@ namespace EfCore_Demo.Setup
                 optionsBuilder.UseSqlite(_sqlConnection);
             }
 
+            if (logToOutput)
+            {
+                optionsBuilder.UseLoggerFactory(new XUnitLoggerFactory(Output));
+            }
+
             DbContext = ctxCreate(optionsBuilder.Options);
             DbContext.Database.EnsureDeleted();
             DbContext.Database.EnsureCreated();
+
+            SecondDbContext = ctxCreate(optionsBuilder.Options);
         }
 
         protected void OutputDbScript()
@@ -70,7 +80,62 @@ namespace EfCore_Demo.Setup
         public void Dispose()
         {
             DbContext.Dispose();
+            SecondDbContext.Dispose();
             _sqlConnection?.Close();
+        }
+    }
+
+    class XUnitLoggerFactory : ILoggerFactory
+    {
+        private readonly ITestOutputHelper _output;
+
+        public XUnitLoggerFactory(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+        public void AddProvider(ILoggerProvider provider)
+        {
+        }
+
+        public ILogger CreateLogger(string categoryName)
+        {
+            return new XUnitLogger(_output);
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    class XUnitLogger : ILogger, IDisposable
+    {
+        private readonly ITestOutputHelper _output;
+
+        public XUnitLogger(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
+        public IDisposable BeginScope<TState>(TState state)
+        {
+            return this;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            return true;
+        }
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+            if (logLevel == LogLevel.Information || logLevel == LogLevel.Debug)
+            {
+                _output.WriteLine(formatter(state, exception));
+            }
         }
     }
 }

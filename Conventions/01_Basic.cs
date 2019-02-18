@@ -35,7 +35,7 @@ namespace EfCore_Demo.Conventions.Basic
 
     public class Tests : EfTest<ConventionsContext>
     {
-        static bool UseSqlServer = false;
+        static bool UseSqlServer = true;
 
         public Tests(ITestOutputHelper output) 
             : base(output, opt => new ConventionsContext(opt), useSqlServer: UseSqlServer)

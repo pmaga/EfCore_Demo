@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EfCore_Demo.Setup;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace EfCore_Demo.Conventions.PK_FK
+namespace EfCore_Demo.Conventions.Extend
 {
     /*
         -----------------------
@@ -19,8 +21,17 @@ namespace EfCore_Demo.Conventions.PK_FK
         public DbSet<Member> Members { get; set; }
 
         public ConventionsContext(DbContextOptions<ConventionsContext> options) : base(options) {}
-    }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                entityType.Relational().TableName = "Eco" + entityType.DisplayName();
+
+                base.OnModelCreating(modelBuilder);
+            }
+        }
+    }
     public class Team
     {
         public int Id { get; set; }
@@ -56,31 +67,6 @@ namespace EfCore_Demo.Conventions.PK_FK
         public void Output_Script()
         {
             OutputDbScript();
-        }
-
-        [Fact]
-        public async Task Result_Async()
-        {
-            Seed();
-
-            var me = await DbContext.Members.FirstAsync();
-            DumpObject(me);
-
-            Separator();
-
-            var myTeam = await DbContext.Teams.FirstAsync();
-            DumpObject(myTeam);
-        }
-
-        private void Seed()
-        {
-            DbContext.Teams.Add(new Team 
-            { 
-                Name = "Impact Team" ,
-                Members = new[] {
-                    new Member { FirstName = "Pawel", LastName = "Maga" }
-            }});
-            DbContext.SaveChanges();
         }
     }
 }

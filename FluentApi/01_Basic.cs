@@ -1,30 +1,40 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
 using EfCore_Demo.Setup;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace EfCore_Demo.Conventions.PK_FK
+namespace EfCore_Demo.FluentApi.Basic
 {
     /*
         -----------------------
             CONFIGURATION
         -----------------------
     */
-
-    public class ConventionsContext : DbContext
+    
+    public class FluentApiContext : DbContext
     {
         public DbSet<Team> Teams { get; set; }
         public DbSet<Member> Members { get; set; }
 
-        public ConventionsContext(DbContextOptions<ConventionsContext> options) : base(options) {}
-    }
+        public FluentApiContext(DbContextOptions<FluentApiContext> options) : base(options) {}
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+   
+        }
+    }
+    
     public class Team
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public DateTime Created { get; set; } 
 
         public ICollection<Member> Members { get; set; }
     }
@@ -32,8 +42,11 @@ namespace EfCore_Demo.Conventions.PK_FK
     public class Member
     {
         public int Id { get; set; }
+        [Column("First_Name", Order = 1, TypeName="varchar(20)")]
         public string FirstName { get; set; }
+        [Column("Last_Name", Order = 2), StringLength(200, MinimumLength = 5)]
         public string LastName { get; set; }
+        [Required]
         public Team Team { get; set; }
     }
 
@@ -45,10 +58,12 @@ namespace EfCore_Demo.Conventions.PK_FK
     */
 
 
-    public class Tests : EfTest<ConventionsContext>
+    public class Tests : EfTest<FluentApiContext>
     {
+        static bool UseSqlServer = true;
+
         public Tests(ITestOutputHelper output) 
-            : base(output, opt => new ConventionsContext(opt), useSqlServer: false)
+            : base(output, opt => new FluentApiContext(opt), useSqlServer: UseSqlServer)
         {
         }
 
@@ -58,30 +73,10 @@ namespace EfCore_Demo.Conventions.PK_FK
             OutputDbScript();
         }
 
-        [Fact]
-        public async Task Result_Async()
-        {
-            Seed();
 
-            var me = await DbContext.Members.FirstAsync();
-            DumpObject(me);
-
-            Separator();
-
-            var myTeam = await DbContext.Teams.FirstAsync();
-            DumpObject(myTeam);
-        }
-
-        private void Seed()
-        {
-            DbContext.Teams.Add(new Team 
-            { 
-                Name = "Impact Team" ,
-                Members = new[] {
-                    new Member { FirstName = "Pawel", LastName = "Maga" }
-            }});
-            DbContext.SaveChanges();
-        }
     }
 }
 
+/*
+
+ */
