@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace EfCore_Demo.FluentApi.Basic
+namespace EfCore_Demo.FluentApi.PK_FK
 {
     /*
         -----------------------
@@ -26,25 +26,12 @@ namespace EfCore_Demo.FluentApi.Basic
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Team>()
-                .Property(t => t.Name)
-                .HasDefaultValue(Guid.NewGuid().ToString("N"))
-                .IsRequired();
+                .HasKey(t => t.Id);
 
             modelBuilder.Entity<Team>()
-                .Property(t => t.Created)
-                .HasDefaultValue(DateTime.UtcNow)
-                .IsRequired();
-
-                
-            modelBuilder.Entity<Member>()
-                .Property(t => t.FirstName)
-                .HasColumnType("nvarchar(200)")
-                .IsRequired();
-
-            
-            modelBuilder.Entity<Member>()
-                .HasOne(m => m.MyTeam)
-                .WithMany(t => t.Members);
+                .HasMany(t => t.Members)
+                .WithOne()
+                .HasForeignKey(nameof(Member.MyTeamId));
         }
     }
     
@@ -63,7 +50,7 @@ namespace EfCore_Demo.FluentApi.Basic
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Team MyTeam { get; set; }
+        public int MyTeamId { get; set; }
     }
 
 
@@ -88,7 +75,5 @@ namespace EfCore_Demo.FluentApi.Basic
         {
             OutputDbScript();
         }
-
-
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace EfCore_Demo.FluentApi.Basic
+namespace EfCore_Demo.FluentApi.Composite_PK
 {
     /*
         -----------------------
@@ -26,25 +26,15 @@ namespace EfCore_Demo.FluentApi.Basic
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Team>()
-                .Property(t => t.Name)
-                .HasDefaultValue(Guid.NewGuid().ToString("N"))
-                .IsRequired();
+                .Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Team>()
+                .HasKey(t => new { t.Id, t.Name });
 
             modelBuilder.Entity<Team>()
-                .Property(t => t.Created)
-                .HasDefaultValue(DateTime.UtcNow)
-                .IsRequired();
-
-                
-            modelBuilder.Entity<Member>()
-                .Property(t => t.FirstName)
-                .HasColumnType("nvarchar(200)")
-                .IsRequired();
-
-            
-            modelBuilder.Entity<Member>()
-                .HasOne(m => m.MyTeam)
-                .WithMany(t => t.Members);
+                .HasMany(t => t.Members)
+                .WithOne()
+                .HasForeignKey(m => new { m.TeamId, m.TeamName });
         }
     }
     
@@ -54,7 +44,6 @@ namespace EfCore_Demo.FluentApi.Basic
         public string Name { get; set; }
 
         public DateTime Created { get; set; } 
-
         public ICollection<Member> Members { get; set; }
     }
 
@@ -63,9 +52,9 @@ namespace EfCore_Demo.FluentApi.Basic
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Team MyTeam { get; set; }
+        public int TeamId { get; set; }
+        public string TeamName { get; set; }
     }
-
 
     /*
         -----------------------
@@ -89,6 +78,11 @@ namespace EfCore_Demo.FluentApi.Basic
             OutputDbScript();
         }
 
-
+         [Fact]
+        public void Output_Script_Sqlite()
+        {
+            // => UseSqlServer = false
+            OutputDbScript();
+        }
     }
 }

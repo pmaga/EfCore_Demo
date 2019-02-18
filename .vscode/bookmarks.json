@@ -156,6 +156,51 @@
 				"line": 26,
 				"column": 0,
 				"label": ""
+			},
+			{
+				"line": 65,
+				"column": 21,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/FluentApi/02_PK_FK.cs",
+		"bookmarks": [
+			{
+				"line": 25,
+				"column": 8,
+				"label": ""
+			},
+			{
+				"line": 52,
+				"column": 17,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/FluentApi/03_Composite_PK.cs",
+		"bookmarks": [
+			{
+				"line": 54,
+				"column": 8,
+				"label": ""
+			}
+		]
+	},
+	{
+		"path": "$ROOTPATH$/FluentApi/04_Concurrency.cs",
+		"bookmarks": [
+			{
+				"line": 26,
+				"column": 15,
+				"label": ""
+			},
+			{
+				"line": 54,
+				"column": 15,
+				"label": ""
 			}
 		]
 	}
