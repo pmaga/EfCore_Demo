@@ -32,7 +32,7 @@ namespace EfCore_Demo.FluentApi.DDDWorld
             teamBuilder
                 .Property<int>("_id")
                 .ValueGeneratedNever()
-                .HasColumnName("Id");;
+                .HasColumnName("Id");
             teamBuilder
                 .HasKey("_id");
             teamBuilder.HasMany(t => t.Members)

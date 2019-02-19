@@ -27,7 +27,7 @@ namespace EfCore_Demo.DataAnnotations.Basic
         {
             modelBuilder.Entity<Team>()
                 .Property(b => b.Created)
-                .HasDefaultValueSql("getdate()");
+                .HasDefaultValueSql("getutcdate()");
         }
     }
     

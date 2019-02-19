@@ -31,10 +31,10 @@ namespace EfCore_Demo.DataAnnotations.InverseProperty
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        //[InverseProperty(nameof(UserStory.CreatedBy))]
+        [InverseProperty(nameof(UserStory.CreatedBy))]
         public ICollection<UserStory> CreatedStories { get; set; }
 
-        //[InverseProperty(nameof(UserStory.UpdatedBy))]
+        [InverseProperty(nameof(UserStory.UpdatedBy))]
         public ICollection<UserStory> UpdatedStories { get; set; }
     }
 

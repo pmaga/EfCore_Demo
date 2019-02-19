@@ -65,7 +65,7 @@ namespace EfCore_Demo.FluentApi.Composite_PK
 
     public class Tests : EfTest<FluentApiContext>
     {
-        static bool UseSqlServer = true;
+        static bool UseSqlServer = false;
 
         public Tests(ITestOutputHelper output) 
             : base(output, opt => new FluentApiContext(opt), useSqlServer: UseSqlServer)
