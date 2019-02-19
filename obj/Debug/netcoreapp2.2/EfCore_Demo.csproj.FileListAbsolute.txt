@@ -1,0 +1,14 @@
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\xunit.runner.reporters.netcoreapp10.dll
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\xunit.runner.utility.netcoreapp10.dll
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\EfCore_Demo.deps.json
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\EfCore_Demo.runtimeconfig.json
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\EfCore_Demo.runtimeconfig.dev.json
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\EfCore_Demo.dll
+c:\Projects\EfCore_Demo\bin\Debug\netcoreapp2.2\EfCore_Demo.pdb
+c:\Projects\EfCore_Demo\obj\Debug\netcoreapp2.2\EfCore_Demo.csprojAssemblyReference.cache
+c:\Projects\EfCore_Demo\obj\Debug\netcoreapp2.2\EfCore_Demo.csproj.CoreCompileInputs.cache
+c:\Projects\EfCore_Demo\obj\Debug\netcoreapp2.2\EfCore_Demo.AssemblyInfoInputs.cache
+c:\Projects\EfCore_Demo\obj\Debug\netcoreapp2.2\EfCore_Demo.AssemblyInfo.cs
+c:\Projects\EfCore_Demo\obj\Debug\netcoreapp2.2\EfCore_Demo.dll
+c:\Projects\EfCore_Demo\obj\Debug\netcoreapp2.2\EfCore_Demo.pdb

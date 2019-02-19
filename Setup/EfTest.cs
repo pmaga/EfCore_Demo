@@ -28,7 +28,8 @@ namespace EfCore_Demo.Setup
             var optionsBuilder = new DbContextOptionsBuilder<T>();
             if (useSqlServer)
             {
-                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=EfCore_Demo;User ID=sa; Password=strongPwd123!;");
+                optionsBuilder.UseSqlServer("Server=.;Database=EfCore_Demo;Trusted_Connection=True;");
+                //optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=EfCore_Demo;User ID=sa; Password=strongPwd123!;");
                 //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=EFProviders.InMemory;Trusted_Connection=True;ConnectRetryCount=0");
             }
             else

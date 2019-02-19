@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading.Tasks;
 using EfCore_Demo.Setup;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace EfCore_Demo.FluentApi.Concurrency
+namespace EfCore_Demo.FluentApi.ConfFiles
 {
     /*
         -----------------------
@@ -19,28 +20,33 @@ namespace EfCore_Demo.FluentApi.Concurrency
     public class FluentApiContext : DbContext
     {
         public DbSet<Team> Teams { get; set; }
-
         public FluentApiContext(DbContextOptions<FluentApiContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Team>()
-                .Property(p => p.RowVersion)
-                .IsRowVersion();
-
-            modelBuilder.Entity<Team>()
-                .Property(p => p.Name)
-                .IsConcurrencyToken();
+            modelBuilder.ApplyConfiguration(new TeamConfiguration());
         }
     }
-    
+
+    public class TeamConfiguration : IEntityTypeConfiguration<Team>
+    {
+        public void Configure(EntityTypeBuilder<Team> builder)
+        {
+            builder.ToTable("Teams");
+            builder.Property(p => p.Name)
+                .HasMaxLength(150);
+            builder.Property(p => p.Created)
+                .HasDefaultValueSql("getdate()");
+        }
+    }
+
     public class Team
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public byte[] RowVersion { get; set; }
+        public DateTime Created { get; set; } 
     }
+
 
     /*
         -----------------------
@@ -52,7 +58,7 @@ namespace EfCore_Demo.FluentApi.Concurrency
     public class Tests : EfTest<FluentApiContext>
     {
         static bool UseSqlServer = true;
-        static bool LogToOutput = true;
+        static bool LogToOutput = false;
 
         public Tests(ITestOutputHelper output) 
             : base(output, opt => new FluentApiContext(opt), useSqlServer: UseSqlServer,
@@ -61,17 +67,9 @@ namespace EfCore_Demo.FluentApi.Concurrency
         }
 
         [Fact]
-        public async Task ConcurrencyCheck()
+        public void Output_Script()
         {
-            DbContext.Teams.Add(new Team 
-            { 
-                Name = "Impact Team"
-            });
-            DbContext.SaveChanges();
-
-            var myTeam = await DbContext.Teams.FirstAsync();
-            myTeam.Name = "Eco Team";
-            DbContext.SaveChanges();
+            OutputDbScript();
         }
     }
 }
